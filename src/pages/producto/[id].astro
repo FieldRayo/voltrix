@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro'
+import AgregarAlCarrito from '../../components/AgregarAlCarrito.jsx'
+import { idValido, producto } from '../../lib/catalogo.js'
+import { dinero } from '../../lib/carrito.js'
+
+const id = idValido(Astro.params.id)
+const p = id && (await producto(id))
+if (!p) return Astro.rewrite('/404')
+---
+<Base titulo={p.nombre} descripcion={p.especificaciones ?? undefined}>
+  {p.categoria_id && <a class="volver" href={`/categoria/${p.categoria_id}`}>← {p.categoria_nombre}</a>}
+  <section class="producto-detalle">
+    <div class="producto-detalle-img">
+      {p.imagen && <img src={p.imagen} alt={p.nombre} width="260" height="260" />}
+    </div>
+    <div class="producto-detalle-info">
+      <h1>{p.nombre}</h1>
+      {p.categoria_nombre && <p class="categoria-tag">{p.categoria_nombre}</p>}
+      <p class="precio">{dinero(p.precio)}</p>
+      {p.especificaciones && <p class="especificaciones">{p.especificaciones}</p>}
+      <p class="stock">{p.stock > 0 ? `${p.stock} disponibles` : 'Sin existencias'}</p>
+      <AgregarAlCarrito client:load producto={{ id: p.id, nombre: p.nombre, precio: p.precio, imagen: p.imagen, stock: p.stock }} />
+    </div>
+  </section>
+</Base>

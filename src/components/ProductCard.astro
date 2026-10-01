@@ -1,0 +1,12 @@
+---
+import { dinero } from '../lib/carrito.js'
+const { producto: p } = Astro.props
+---
+<a class="producto-card" href={`/producto/${p.id}`}>
+  <div class="producto-img">
+    {p.imagen && <img src={p.imagen} alt="" width="180" height="110" loading="lazy" />}
+  </div>
+  <h3>{p.nombre}</h3>
+  <p class="precio">{dinero(p.precio)}</p>
+  <p class="stock">{p.stock > 0 ? `${p.stock} disponibles` : 'Agotado'}</p>
+</a>

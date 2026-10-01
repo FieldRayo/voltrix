@@ -1,0 +1,75 @@
+---
+import '../styles/global.css'
+import { categorias } from '../lib/catalogo.js'
+import BotonCarrito from '../components/BotonCarrito.jsx'
+import MenuUsuario from '../components/MenuUsuario.jsx'
+
+const { titulo, descripcion = 'Microcontroladores, sensores y displays con envío a todo México.', sinSidebar = false } = Astro.props
+const cats = await categorias()
+const ruta = Astro.url.pathname
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={descripcion} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{titulo ? `${titulo} · Voltrix` : 'Voltrix · Componentes electrónicos'}</title>
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+    <div class="app-layout">
+      <header class="topbar">
+        <a class="topbar-logo" href="/">VOLTRIX</a>
+        <nav class="topbar-nav" aria-label="Principal">
+          <MenuUsuario client:load />
+          <BotonCarrito client:load />
+        </nav>
+      </header>
+
+      <div class="app-body">
+        {!sinSidebar && (
+          <aside class="sidebar">
+            <h2>Categorías</h2>
+            <ul>
+              <li><a href="/" aria-current={ruta === '/' ? 'page' : undefined}>Todos</a></li>
+              {cats.map((c) => (
+                <li>
+                  <a href={`/categoria/${c.id}`} aria-current={ruta === `/categoria/${c.id}` ? 'page' : undefined}>
+                    {c.nombre}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+        <main id="contenido" class="app-main"><slot /></main>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-top">
+          <div class="footer-col">
+            <p class="footer-brand">VOLTRIX</p>
+            <p>Componentes electrónicos para makers, estudiantes y talleres.</p>
+          </div>
+          <div class="footer-col">
+            <h2>Categorías</h2>
+            <ul>{cats.map((c) => <li><a href={`/categoria/${c.id}`}>{c.nombre}</a></li>)}</ul>
+          </div>
+          <div class="footer-col">
+            <h2>Tu cuenta</h2>
+            <ul>
+              <li><a href="/cuenta">Mis pedidos</a></li>
+              <li><a href="/carrito">Carrito</a></li>
+              <li><a href="/registro">Crear cuenta</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© {new Date().getFullYear()} Voltrix</p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

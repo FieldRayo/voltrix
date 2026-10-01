@@ -1,85 +1,69 @@
 # Voltrix
 
-Tienda de componentes electrónicos. Este repositorio une las tres prácticas de
-Programación Web 2 en un solo proyecto:
+Tienda en línea de componentes electrónicos: catálogo, carrito, cuentas de
+cliente con OAuth 2.0 y pedidos con control de stock.
 
-| Práctica | Qué aportó |
-|--|--|
-| P1, componentes y efectos | La vista Equipo (`Equipo.jsx` y `ProfileCard.jsx`), con su carga simulada por `useEffect` y las tarjetas que guardan su propio estado. |
-| P2, Voltrix y maquetado del flujo | La marca, la paleta, la máquina de estados, el carrito con Context y `useReducer`, el footer y los skeletons. De ahí salen también el catálogo de electrónica y el campo `especificaciones`. |
-| P6, GraphQL con base de datos | El backend de Apollo Server sobre PostgreSQL y las consultas del front (`src/api/graphql.js`). |
-
-Las prácticas se unieron tal como estaban. No se completó lo que quedaba
-pendiente en cada una.
+- **Astro 7** con render en servidor (adapter de Netlify) e islas de React para
+  lo interactivo (carrito, sesión, checkout, cuenta).
+- **PostgreSQL** para catálogo, usuarios, pedidos y tokens.
+- **API GraphQL** en `/api/graphql` (graphql-yoga).
+- **OAuth 2.0** en `/api/oauth/token` y `/api/oauth/revoke`.
 
 ```
-voltrix/
-  db.sql        esquema y datos de ejemplo (PostgreSQL)
-  back/         servidor GraphQL (Apollo Server + node-postgres)
-  front/        cliente React (Vite)
+db.sql                 esquema y catálogo inicial
+src/lib/               db, auth (scrypt + tokens), GraphQL, carrito y sesión del cliente
+src/pages/             páginas (.astro) y endpoints (api/)
+src/components/        islas de React
+scripts/crear-admin.mjs
+test/api.test.js       prueba de punta a punta
 ```
 
-## Paleta y estilo
+## Desarrollo local
 
-La interfaz es de barro: cada bloque sale del fondo con una sombra clara
-arriba y una oscura abajo, sin bordes ni líneas divisorias. Los hundidos
-(la miniatura del producto, el input de cantidad) usan la misma sombra por
-dentro. Todo vive en las variables del inicio de
-`front/src/styles/global.css`.
-
-| Uso | Color |
-|--|--|
-| Azul de marca | `#1d4ed8` |
-| Azul al pasar el cursor | `#1638ad` |
-| Azul suave para etiquetas | `#eef2ff` |
-| Tinta del footer | `#1a1a2e` |
-| Fondo | `#e9ebf1` |
-| Superficie | `#f1f3f8` |
-| Alerta | `#e63946` |
-| Confirmación | `#7ee787` |
-
-## 1. Base de datos
-
-PostgreSQL. Una sola vez, para crear el rol y la base:
+Requiere Node 22+ y PostgreSQL 13+.
 
 ```bash
-sudo -u postgres psql -c "CREATE ROLE voltrix LOGIN PASSWORD 'voltrix'"
-sudo -u postgres createdb -O voltrix voltrix
-```
-
-Y para cargar el esquema con sus datos de ejemplo (se puede repetir, el
-archivo empieza con DROP):
-
-```bash
-psql -h 127.0.0.1 -U voltrix -d voltrix -f db.sql
-```
-
-Crea categorías, productos y dos usuarios de ejemplo.
-
-## 2. Backend
-
-```bash
-cd back
-cp .env.example .env    # ajusta usuario y contraseña de tu PostgreSQL
+cp .env.example .env              # ajusta DATABASE_URL
+psql "$DATABASE_URL" -f db.sql    # ojo: empieza con DROP
 npm install
-npm start
+npm run crear-admin -- admin@tudominio.com "Nombre" 'una-contraseña-larga'
+npm run dev                       # http://localhost:4321
+npm test                          # con el dev server corriendo
 ```
 
-Queda en http://localhost:4000 con un solo endpoint GraphQL.
+## Autenticación (OAuth 2.0)
 
-## 3. Frontend
+Cliente público `voltrix-web` (configurable con `OAUTH_CLIENT_ID`).
+
+| Grant | Petición (`application/x-www-form-urlencoded`) |
+|--|--|
+| Contraseña (RFC 6749 §4.3) | `grant_type=password&username=<correo>&password=<…>&client_id=voltrix-web` |
+| Renovar (§6) | `grant_type=refresh_token&refresh_token=<…>&client_id=voltrix-web` |
+| Cerrar sesión (RFC 7009) | `POST /api/oauth/revoke` con `token=<…>` |
+
+- Access token de 1 hora y refresh de 30 días. Son opacos y en la base solo se
+  guarda su sha256.
+- Cada refresh se usa una sola vez (rotación). Revocar cualquiera de los dos
+  tokens cierra la sesión entera.
+- Las contraseñas se guardan con scrypt. Tras 5 intentos fallidos la cuenta se
+  bloquea 15 minutos.
+- La API GraphQL recibe el token como `Authorization: Bearer <access_token>`.
+  `crearPedido` siempre registra el pedido a nombre del dueño del token.
+  Usuarios, todos los pedidos y el CRUD de productos son solo para `ADMIN`.
+
+Los clientes se registran en `/registro` y los administradores se crean con
+`npm run crear-admin`.
+
+## Despliegue en Netlify
 
 ```bash
-cd front
-npm install
-npm run dev
+npx netlify login
+npx netlify init            # crea o enlaza el sitio
+npx netlify db init         # Netlify DB (Postgres en Neon); define NETLIFY_DATABASE_URL
+psql "<url de la base>" -f db.sql
+DATABASE_URL="<url de la base>" npm run crear-admin -- admin@tudominio.com "Nombre" '…'
+npx netlify deploy --build --prod
 ```
 
-Queda en http://localhost:5173 y apunta al backend en el puerto 4000.
-
-## Flujo
-
-`home > categoria > producto > carrito > checkout`, más la vista `equipo`.
-Todo se controla con el estado `vista` en `App.jsx`, sin router ni URLs.
-El checkout dispara la mutación `crearPedido`, que registra el pedido, guarda
-sus detalles y descuenta stock dentro de una transacción.
+Si se usa otra base PostgreSQL, basta con definir `DATABASE_URL` en las
+variables de entorno del sitio.

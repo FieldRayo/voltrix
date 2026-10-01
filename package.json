@@ -1,0 +1,22 @@
+{
+  "name": "voltrix",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env node_modules/astro/bin/astro.mjs dev",
+    "build": "astro build",
+    "preview": "node --env-file-if-exists=.env node_modules/astro/bin/astro.mjs preview",
+    "test": "node --test test/",
+    "crear-admin": "node --env-file-if-exists=.env scripts/crear-admin.mjs"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^8.2.6",
+    "@astrojs/react": "^7.0.0",
+    "astro": "^7.3.5",
+    "graphql": "^17.0.2",
+    "graphql-yoga": "^5.24.1",
+    "pg": "^8.23.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}

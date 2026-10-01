@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro'
+import ProductCard from '../components/ProductCard.astro'
+import { productos } from '../lib/catalogo.js'
+
+const lista = await productos()
+---
+<Base>
+  <section class="hero">
+    <h1>Componentes que encienden tus proyectos</h1>
+    <p>Microcontroladores, sensores y displays con envío a todo México.</p>
+  </section>
+  <h2>Todos los productos</h2>
+  <div class="grid-productos">{lista.map((p) => <ProductCard producto={p} />)}</div>
+</Base>

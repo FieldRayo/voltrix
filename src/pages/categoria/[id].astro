@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro'
+import ProductCard from '../../components/ProductCard.astro'
+import { categoria, idValido, productosDeCategoria } from '../../lib/catalogo.js'
+
+const id = idValido(Astro.params.id)
+const cat = id && (await categoria(id))
+if (!cat) return Astro.rewrite('/404')
+const lista = await productosDeCategoria(id)
+---
+<Base titulo={cat.nombre} descripcion={cat.descripcion ?? undefined}>
+  <h1>{cat.nombre}</h1>
+  {cat.descripcion && <p class="introduccion">{cat.descripcion}</p>}
+  {lista.length
+    ? <div class="grid-productos">{lista.map((p) => <ProductCard producto={p} />)}</div>
+    : <p>Pronto tendremos productos en esta categoría.</p>}
+</Base>
