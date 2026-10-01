@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Pantalla LCD 16x2">
+  <rect x="52" y="86" width="296" height="228" rx="12" fill="#1f7a4d"/>
+  <rect x="84" y="92" width="232" height="18" rx="4" fill="#161a24"/>
+  <rect x="80" y="126" width="240" height="132" rx="6" fill="#1d4ed8"/>
+  <g fill="#cfe0ff">
+    <rect x="98" y="152" width="14" height="22" rx="2"/>
+    <rect x="120" y="152" width="14" height="22" rx="2"/>
+    <rect x="142" y="152" width="14" height="22" rx="2"/>
+    <rect x="164" y="152" width="14" height="22" rx="2"/>
+    <rect x="186" y="152" width="14" height="22" rx="2"/>
+    <rect x="208" y="152" width="14" height="22" rx="2"/>
+    <rect x="98" y="196" width="14" height="22" rx="2"/>
+    <rect x="120" y="196" width="14" height="22" rx="2"/>
+    <rect x="142" y="196" width="14" height="22" rx="2"/>
+    <rect x="164" y="196" width="14" height="22" rx="2"/>
+  </g>
+  <rect x="244" y="266" width="76" height="40" rx="6" fill="#14603c"/>
+  <g fill="#d6a531">
+    <rect x="256" y="278" width="10" height="10" rx="2"/>
+    <rect x="274" y="278" width="10" height="10" rx="2"/>
+    <rect x="292" y="278" width="10" height="10" rx="2"/>
+  </g>
+  <g fill="#14603c">
+    <circle cx="70" cy="104" r="8"/><circle cx="330" cy="104" r="8"/>
+    <circle cx="70" cy="296" r="8"/>
+  </g>
+</svg>

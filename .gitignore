@@ -1,0 +1,10 @@
+node_modules/
+dist/
+graphify-out/
+.vite/
+*.zip
+*.log
+.env*
+!.env.example
+.DS_Store
+*.local

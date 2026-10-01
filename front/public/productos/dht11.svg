@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Sensor de humedad DHT11">
+  <rect x="136" y="58" width="128" height="176" rx="12" fill="#2f6fe0"/>
+  <g fill="#1f4fa8">
+    <circle cx="164" cy="90" r="9"/><circle cx="200" cy="90" r="9"/><circle cx="236" cy="90" r="9"/>
+    <circle cx="164" cy="126" r="9"/><circle cx="200" cy="126" r="9"/><circle cx="236" cy="126" r="9"/>
+    <circle cx="164" cy="162" r="9"/><circle cx="200" cy="162" r="9"/><circle cx="236" cy="162" r="9"/>
+    <circle cx="164" cy="198" r="9"/><circle cx="200" cy="198" r="9"/><circle cx="236" cy="198" r="9"/>
+  </g>
+  <rect x="148" y="234" width="104" height="44" rx="6" fill="#1b4fa0"/>
+  <g fill="#d6a531">
+    <rect x="166" y="278" width="12" height="62" rx="3"/>
+    <rect x="194" y="278" width="12" height="62" rx="3"/>
+    <rect x="222" y="278" width="12" height="62" rx="3"/>
+  </g>
+</svg>

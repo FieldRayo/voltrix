@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Placa ESP32">
+  <g fill="none" stroke="#202a44" stroke-width="7" stroke-linecap="round">
+    <path d="M150 34h34M156 24h44M162 44h22" />
+  </g>
+  <rect x="118" y="46" width="164" height="316" rx="10" fill="#202a44"/>
+  <rect x="140" y="70" width="120" height="96" rx="7" fill="#c9ccd4"/>
+  <rect x="152" y="82" width="96" height="72" rx="4" fill="#b3b7c1"/>
+  <rect x="164" y="186" width="72" height="44" rx="5" fill="#141b2e"/>
+  <rect x="176" y="244" width="48" height="26" rx="4" fill="#141b2e"/>
+  <g fill="#d6a531">
+    <rect x="122" y="184" width="14" height="14" rx="3"/>
+    <rect x="122" y="212" width="14" height="14" rx="3"/>
+    <rect x="122" y="240" width="14" height="14" rx="3"/>
+    <rect x="122" y="268" width="14" height="14" rx="3"/>
+    <rect x="122" y="296" width="14" height="14" rx="3"/>
+    <rect x="264" y="184" width="14" height="14" rx="3"/>
+    <rect x="264" y="212" width="14" height="14" rx="3"/>
+    <rect x="264" y="240" width="14" height="14" rx="3"/>
+    <rect x="264" y="268" width="14" height="14" rx="3"/>
+    <rect x="264" y="296" width="14" height="14" rx="3"/>
+  </g>
+  <rect x="168" y="330" width="64" height="26" rx="4" fill="#9aa1ad"/>
+</svg>
